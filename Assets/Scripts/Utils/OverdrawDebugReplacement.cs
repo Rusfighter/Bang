@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+[ExecuteInEditMode]
 public class OverdrawDebugReplacement : MonoBehaviour
 {
     public Shader _OverdrawShader;
@@ -8,15 +8,11 @@ public class OverdrawDebugReplacement : MonoBehaviour
     private Camera _Camera;
     private bool _SceneFogSettings = false;
 
-    void OnLevelWasLoaded()
-    {
-        // Every time a scene is loaded we have to disable fog. We save it for restorting it later in OnDisable
-        _SceneFogSettings = RenderSettings.fog;
-        RenderSettings.fog = false;
-    }
-
     void OnEnable()
     {
+        _SceneFogSettings = RenderSettings.fog;
+        RenderSettings.fog = false;
+
         // not set in the editor inspector
         if (_OverdrawShader == null)
         {

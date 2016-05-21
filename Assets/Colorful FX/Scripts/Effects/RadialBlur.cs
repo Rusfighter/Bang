@@ -50,7 +50,7 @@ namespace Colorful
 
         void OnPreRender()
         {
-            m_tex = RenderTexture.GetTemporary(m_camera.pixelWidth, m_camera.pixelHeight);
+            m_tex = RenderTexture.GetTemporary((int)(m_camera.pixelWidth/ 1.5f), (int)(m_camera.pixelHeight / 1.5f));
             m_camera.targetTexture = m_tex;
         }
 
@@ -63,10 +63,10 @@ namespace Colorful
 
         protected override void OnRenderImage(RenderTexture source, RenderTexture destination)
 		{
-			if (Strength <= 0f)
+            if (Strength <= 0f)
 			{
 				Graphics.Blit(source, destination);
-				return;
+                return;
 			}
 
 			int samples = Quality == QualityPreset.Custom ? Samples : (int)Quality;
@@ -75,6 +75,6 @@ namespace Colorful
 			Material.SetVector("_Params", new Vector4(Strength, samples, Sharpness * 0.01f, Darkness * 0.02f));
 
 			Graphics.Blit(source, destination, Material, EnableVignette ? 1 : 0);
-		}
+        }
 	}
 }
