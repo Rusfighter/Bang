@@ -80,6 +80,7 @@ obj/
 *.user
 *.unityproj
 *.booproj
+*.apk
 
 ============
 OS generated
