@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class MenuController : MonoBehaviour {
+/*public class MenuController : MonoBehaviour {
 
     // Use this for initialization
     void Start()
@@ -50,4 +50,4 @@ public class MenuController : MonoBehaviour {
             Debug.Log("Not signed in, could not start mp game");
         }
 	}
-}
+}*/

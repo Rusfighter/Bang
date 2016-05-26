@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: Cowboy
   m_Shader: {fileID: 4800000, guid: dd496457a855aa341b0d7b7b475a7a3a, type: 3}
-  m_ShaderKeywords: OUTLINES TCP2_BUMP _EMISSION _NORMALMAP
+  m_ShaderKeywords: OUTLINES _EMISSION _NORMALMAP
   m_LightmapFlags: 1
   m_CustomRenderQueue: 2000
   stringTagMap: {}
@@ -163,11 +163,11 @@ Material:
       data:
         first:
           name: _RampSmooth
-        second: 0.421
+        second: 0.172
       data:
         first:
           name: _Outline
-        second: 0.5
+        second: 34.2
       data:
         first:
           name: _TexLod

@@ -67,12 +67,12 @@ Material:
     m_Floats:
       data:
         first:
-          name: _RimPower
-        second: 4.275383
-      data:
-        first:
           name: _InvFade
         second: 1
+      data:
+        first:
+          name: _RimPower
+        second: 4.275383
       data:
         first:
           name: _DetailPower
@@ -114,3 +114,7 @@ Material:
         first:
           name: _EmisColor
         second: {r: 0.2, g: 0.2, b: 0.2, a: 0}
+      data:
+        first:
+          name: _BlendColor
+        second: {r: 1, g: 1, b: 1, a: 1}

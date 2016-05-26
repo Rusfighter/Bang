@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using UnityEngine.SceneManagement;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi.Multiplayer;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class MultiplayerController : RealTimeMultiplayerListener {
 
 
-	private delegate void OnBangTime(float time);
+	public delegate void OnBangTime(float time);
 	public static event OnBangTime onBangTimeReceived;
 
 
@@ -226,4 +226,4 @@ public class MultiplayerController : RealTimeMultiplayerListener {
         Debug.Log("Sending my update message  " + messageToSend + " to all players in the room");
         PlayGamesPlatform.Instance.RealTime.SendMessageToAll(true, messageToSend); //Bool for reliabilty true = tcp, false = udp
     }
-}
+}*/

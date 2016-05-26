@@ -6915,7 +6915,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &141630
 GameObject:
   m_ObjectHideFlags: 1
@@ -9418,7 +9418,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 493632}
-  - 114: {fileID: 11456664}
   m_Layer: 0
   m_Name: _Scene
   m_TagString: Untagged
@@ -46830,19 +46829,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22c7f4e0b6f1540a3a480ef9598a46d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11456664
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cedf6cc1514118245b6a0e0fb7e4ac5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MaxVerticesPerObject: 60000
-  m_GridSize: {x: 1, y: 1, z: 8}
 --- !u!114 &11465900
 MonoBehaviour:
   m_ObjectHideFlags: 1

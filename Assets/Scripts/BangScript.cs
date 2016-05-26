@@ -18,7 +18,7 @@ public class Ready_steady_bang : MonoBehaviour {
         done = false;
         StartCoroutine(Countdown(1f));
 
-		MultiplayerController.onBangTimeReceived += OnMessage;
+		//MultiplayerController.onBangTimeReceived += OnMessage;
 	}
 
 	void OnMessage(float time){
