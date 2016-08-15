@@ -50,7 +50,7 @@ namespace Colorful
 
         void OnPreRender()
         {
-            m_tex = RenderTexture.GetTemporary((int)(m_camera.pixelWidth/ 1.5f), (int)(m_camera.pixelHeight / 1.5f));
+            m_tex = RenderTexture.GetTemporary((int)(m_camera.pixelWidth/ 1.3f), (int)(m_camera.pixelHeight / 1.3f));
             m_camera.targetTexture = m_tex;
         }
 

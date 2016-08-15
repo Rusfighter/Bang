@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 /// <summary>
 /// Off Screen Particle Rendering System
 /// ©2015 Disruptor Beam
@@ -60,12 +62,12 @@ Shader "OffScreenParticles/CloudVolume_Offscreen"
             {
                v2f o;
                o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
-               float3 wvp = mul(_Object2World, v.vertex);
+               float3 wvp = mul(unity_ObjectToWorld, v.vertex);
                o.projPos = ComputeScreenPos (o.vertex);
                COMPUTE_EYEDEPTH(o.projPos.z);
                o.texcoord = v.texcoord;
                
-               float3 normalDir = normalize(mul(_Object2World, float4(v.normal,0)).xyz);
+               float3 normalDir = normalize(mul(unity_ObjectToWorld, float4(v.normal,0)).xyz);
                float3 camVec = _WorldSpaceCameraPos - wvp.xyz;
                o.alpha = saturate(abs(dot(normalDir, normalize(camVec))) - _angle_bias);
                o.alpha *= o.alpha;

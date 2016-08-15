@@ -42,7 +42,7 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				i.uv.y = saturate(i.uv.y + 0.46);
+				i.uv.y = saturate(i.uv.y + 0.52);
 				fixed4 col = tex2D(_MainTex, i.uv);
 				return col;
 			}
