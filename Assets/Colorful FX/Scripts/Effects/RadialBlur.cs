@@ -48,19 +48,6 @@ namespace Colorful
             m_camera = GetComponent<Camera>();
         }
 
-        void OnPreRender()
-        {
-            m_tex = RenderTexture.GetTemporary((int)(m_camera.pixelWidth/ 1.3f), (int)(m_camera.pixelHeight / 1.3f));
-            m_camera.targetTexture = m_tex;
-        }
-
-        void OnPostRender()
-        {
-            m_camera.targetTexture = null;
-            RenderTexture.ReleaseTemporary(m_tex);
-        }
-
-
         protected override void OnRenderImage(RenderTexture source, RenderTexture destination)
 		{
             if (Strength <= 0f)

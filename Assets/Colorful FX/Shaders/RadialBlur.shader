@@ -32,8 +32,7 @@ Shader "Hidden/Colorful/Radial Blur"
 				color += tex2Dlod(_MainTex, fixed4(coord * scale + _Center, 0.0, 0.0));
 			}
 
-			color /= samples;
-			return color;
+			return color/samples;
 		}
 
 		half vignette(half2 uv)
