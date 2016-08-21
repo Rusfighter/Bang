@@ -24,14 +24,13 @@ public class PlayerManager : MonoBehaviour
     public delegate void StateChanged(PlayerState newState);
     public event StateChanged onStateChange;
 
-    public delegate void BulletShooted(GameObject bullet);
+    public delegate void BulletShooted(Bullet bullet);
     public event BulletShooted onBulletShooted;
 
     private Rigidbody[] m_RigidBodys;
 
 
     readonly int m_ReadyTrigger = Animator.StringToHash("Ready");
-    readonly int m_SteadyTrigger = Animator.StringToHash("Steady");
     readonly int m_BangBool = Animator.StringToHash("Bang");
 
     void Awake()
@@ -88,7 +87,7 @@ public class PlayerManager : MonoBehaviour
         bull.Init(m_Target.position);
 
         if (onBulletShooted != null)
-            onBulletShooted(bullet);
+            onBulletShooted(bull);
     }
 
     public void onHit(Rigidbody rb, Vector3 direction)

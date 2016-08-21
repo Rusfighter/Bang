@@ -40,14 +40,6 @@ namespace Colorful
 		[Tooltip("Should the effect be applied like a vignette ?")]
 		public bool EnableVignette = true;
 
-        private RenderTexture m_tex;
-        private Camera m_camera;
-
-        void Awake()
-        {
-            m_camera = GetComponent<Camera>();
-        }
-
         protected override void OnRenderImage(RenderTexture source, RenderTexture destination)
 		{
             if (Strength <= 0f)

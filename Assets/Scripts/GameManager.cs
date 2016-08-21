@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
     public PlayerManager m_PlayerLeft;
     public PlayerManager m_PlayerRight;
 
+    public CameraManager m_CameraManager;
+
     private GameEvent m_Event;
     public GameEvent m_CurrentEvent {
         get { return m_Event; }
@@ -44,18 +46,45 @@ public class GameManager : MonoBehaviour {
                 StartCoroutine(SetState(0, GameEvent.IDLE));
                 break;
             case GameEvent.IDLE:
-                StartCoroutine(SetState(5, GameEvent.READY));
+                StartCoroutine(SetState(2, GameEvent.READY));
                 break;
             case GameEvent.READY:
                 m_PlayerLeft.nextState();
                 m_PlayerRight.nextState();
-                StartCoroutine(SetState(5, GameEvent.BANG));
+                StartCoroutine(SetState(2, GameEvent.BANG));
                 break;
             case GameEvent.BANG:
                 //enable controllers
                 m_PlayerController.enabled = true;
-                StartCoroutine(SetState(10000, GameEvent.SLOWMOTION));
+                StartCoroutine(SetState(0, GameEvent.SLOWMOTION));
+                break;
+
+            case GameEvent.SLOWMOTION:
+                m_PlayerLeft.onBulletShooted += OnBulletShootedEvent;
+                //StartCoroutine(SetState(2, GameEvent.FINISH));
+                break;
+            case GameEvent.FINISH:
+                StartCoroutine(SetState(100000, GameEvent.GAMEOVER));
                 break;
         }
+    }
+
+    private void OnBulletShootedEvent(Bullet bullet)
+    {
+        m_CameraManager.StartFollowBullet(bullet);
+        //slowdown bullet
+        bullet.m_Speed *= 0.05f;
+
+        StartCoroutine(OnSlowDownFinished(bullet));
+
+        m_PlayerLeft.onBulletShooted -= OnBulletShootedEvent;
+    }
+
+    IEnumerator OnSlowDownFinished(Bullet bullet)
+    {
+        yield return new WaitForSeconds(5f);
+        bullet.m_Speed *= 20f;
+
+        m_CameraManager.StopFollowBullet(bullet);
     }
 }

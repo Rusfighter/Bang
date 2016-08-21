@@ -2,7 +2,7 @@
 // Copyright (c) 2015 - Thomas Hourdel
 // http://www.thomashourdel.com
 
-Shader "Hidden/Colorful/Radial Blur"
+Shader "Custom/Colorful/Radial Blur"
 {
 	Properties
 	{
@@ -68,8 +68,6 @@ Shader "Hidden/Colorful/Radial Blur"
 				#pragma vertex vert_img
 				#pragma fragment frag
 				#pragma fragmentoption ARB_precision_hint_fastest
-				#pragma target 3.0
-				#pragma glsl
 
 			ENDCG
 		}

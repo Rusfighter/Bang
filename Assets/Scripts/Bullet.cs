@@ -16,12 +16,10 @@ public class Bullet : MonoBehaviour {
 
     void Update()
     {
-        if (m_Target == null) return;
         m_Direction = (m_Target - transform.position).normalized;
         Vector3 pos = transform.position;
         pos += m_Direction * m_Speed * Time.deltaTime;
         transform.position = pos;
-
     }
 
     void OnTriggerEnter(Collider other)
@@ -29,7 +27,7 @@ public class Bullet : MonoBehaviour {
         if (m_HaveHitted)
             return;
 
-        Debug.Log("collision");
+        //Debug.Log("collision");
         PlayerManager playerManager = other.gameObject.GetComponentInParent<PlayerManager>();
         Rigidbody rb = other.GetComponent<Rigidbody>();
 
