@@ -8,6 +8,8 @@
 	}
 	SubShader
 	{
+
+		Tags{ "RenderType" = "Opaque" }
 		// No culling or depth
 		Cull Off ZWrite Off ZTest Always
 
@@ -52,11 +54,6 @@
 				half scale;
 				half factor = _Params.y - 1;
 
-				/*for (int i = 1; i < size; i++)
-				{
-					scale = 1.0 + _Params.x * (i / factor);
-					color += tex2Dlod(_MainTex, fixed4(coord * scale + _Center, 0.0, 0.0));
-				}*/
 				color += tex2Dlod(_MainTex, fixed4(coord + _Center, 0.0, 0.0));
 
 				scale = 1.0 + _Params.x * factor;

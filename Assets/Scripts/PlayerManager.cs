@@ -14,21 +14,28 @@ public class PlayerManager : MonoBehaviour
     public GameObject m_Bullet;
     public Transform m_BulletStart;
 
-    public Transform m_Target;
+    public Transform m_CameraTransform;
 
     Animator m_Animator;
-
-    [SerializeField]
     private PlayerState m_State;
 
     public delegate void StateChanged(PlayerState newState);
     public event StateChanged onStateChange;
 
-    public delegate void BulletShooted(Bullet bullet);
+    public delegate void BulletShooted(PlayerManager playerMgr, float time);
     public event BulletShooted onBulletShooted;
 
     private Rigidbody[] m_RigidBodys;
 
+    private Bullet m_BulletScript;
+    public Bullet Bullet { get { return m_BulletScript; } }
+
+    private float m_ShootTime = float.MaxValue;
+    public float ShootTime
+    {
+        set { m_ShootTime = value; }
+        get { return m_ShootTime; }
+    }
 
     readonly int m_ReadyTrigger = Animator.StringToHash("Ready");
     readonly int m_BangBool = Animator.StringToHash("Bang");
@@ -45,6 +52,12 @@ public class PlayerManager : MonoBehaviour
         int lenght = m_RigidBodys.Length;
         for (int i = 0; i < lenght; i++)
             m_RigidBodys[i].isKinematic = true;
+    }
+
+    public Vector3 getHitPoint()
+    {
+        Vector3 hitPoint =  m_RigidBodys[Random.Range(0, m_RigidBodys.Length - 1)].transform.position;
+        return hitPoint;
     }
 
     public PlayerState State {
@@ -71,7 +84,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public IEnumerator Shoot(float delay)
+    private IEnumerator Shoot(float delay)
     {
         yield return new WaitForSeconds(delay);   //Wait
 
@@ -79,15 +92,10 @@ public class PlayerManager : MonoBehaviour
         GameObject bullet = (GameObject)Instantiate(m_Bullet, m_BulletStart.position, m_BulletStart.rotation);
         bullet.SetActive(true);
 
-        Debug.Log("Shooted");
-
-
-        //ugly code, should be replaced to game manager
-        Bullet bull = bullet.GetComponent<Bullet>();
-        bull.Init(m_Target.position);
+        m_BulletScript = bullet.GetComponent<Bullet>();
 
         if (onBulletShooted != null)
-            onBulletShooted(bull);
+            onBulletShooted(this, Time.timeSinceLevelLoad);
     }
 
     public void onHit(Rigidbody rb, Vector3 direction)

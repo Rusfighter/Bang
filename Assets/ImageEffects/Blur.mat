@@ -130,4 +130,4 @@ Material:
       second: {r: 0, g: 0, b: 0, a: 1}
     - first:
         name: _Params
-      second: {r: 0, g: 0, b: 0, a: 0}
+      second: {r: 0.0018821359, g: 0, b: 0, a: 0}
