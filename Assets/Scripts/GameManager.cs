@@ -19,11 +19,12 @@ public class GameManager : MonoBehaviour {
     public CameraManager m_CameraManager;
 
     public float m_BangWaitTime = 3f;
-
+    public float m_ShowEnemyBullet = 7f;
+    public float m_OpponentShoot = 1f;
 
     private GameMode m_Mode;
 
-    private PlayerManager m_Player, m_Opponent, m_Winner;
+    private PlayerManager m_Player, m_Opponent;
     private PlayerController m_PlayerController;
     private StateMachine<GameState> m_StateMachine;
 
@@ -90,20 +91,21 @@ public class GameManager : MonoBehaviour {
             case GameState.STEADY:
                 m_StateMachine.NextState(m_BangWaitTime);
                 m_PlayerController.enabled = true;
+                m_PlayerController.onShoot += () => { m_PlayerController.enabled = false; };
 
                 m_Player.onBulletShooted += OnBulletShootedEvent;
                 m_Opponent.onBulletShooted += OnBulletShootedEvent;
 
                 break;
             case GameState.BANG:
-                StartCoroutine(PlayersNextState(m_Opponent, 1f));
+                StartCoroutine(PlayersNextState(m_Opponent, m_OpponentShoot));
                 //simulate
-                m_StateMachine.NextState(7);
+                m_StateMachine.NextState(4);
                 break;
             case GameState.FINISH:
-                DecideWinner();
+                FinishGame();
                 m_PlayerController.enabled = false;
-                m_StateMachine.NextState(20);
+                //m_StateMachine.NextState(20);
                 break;
             case GameState.GAMEOVER:
                 SceneManager.LoadScene(0);
@@ -117,38 +119,65 @@ public class GameManager : MonoBehaviour {
         mgr.nextState();
     }
 
-    private void DecideWinner()
+    private void FinishGame()
     {
-        bool arg = m_Player.ShootTime > m_Opponent.ShootTime;
-        m_Winner = arg ? m_Opponent : m_Player ;
-        PlayerManager looser = arg ? m_Player : m_Opponent;
+        PlayerManager winner = getWinner();
+        PlayerManager looser = getLooser();
 
-        if (m_Winner.Bullet != null && m_Player == m_Winner)
-            m_Winner.Bullet.ChangeSpeed(false);
-        else looser.Bullet.onDestroy += (Bullet bullet) => {
-            StartCoroutine(ShowWinner());
-        };
+        Debug.Assert(winner != looser, "Winner and looser cannot be the same");
+        //next phase of slowmotion
+        NextPhaseSlowMotion(m_Player);
 
-        if (looser.Bullet != null)
+        //gameover if winners bullet is destroyed
+        winner.Bullet.onDestroy += (Bullet bullet) => { m_StateMachine.NextState(3); };
+
+        if (m_Player == looser) // player not is not the winner
         {
-            looser.Bullet.ChangeSpeed(false);
-            looser.Bullet.isMissing(
-                new Vector3(
-                    Random.value > 0.5 ? -1 : 1,
-                    Random.Range(0, 1), 0));
+            if (m_Player.Bullet != null)
+            {
+                //miss the bullet and switch to other player
+                m_Player.Bullet.isMissing(new Vector3(Random.value > 0.5 ? -1 : 1,Random.Range(0, 1), 0));
+                m_Player.Bullet.onDestroy += (Bullet bullet) => { StartCoroutine(SwitchWinner()); };
+            }
+            else StartCoroutine(SwitchWinner());
         }
-
-        //reset camera
-        m_CameraManager.StopFollow();
     }
 
-    private IEnumerator ShowWinner()
+    public PlayerManager getLooser()
     {
-        m_CameraManager.StartFollow(m_Winner.Bullet.gameObject);
+        bool arg = m_Player.ShootTime > m_Opponent.ShootTime;
+        return arg ? m_Player : m_Opponent;
+    }
 
-        yield return new WaitForSeconds(5f);
-        m_CameraManager.StopFollow();
-        m_Winner.Bullet.ChangeSpeed(false);
+    public PlayerManager getWinner()
+    {
+        bool arg = m_Player.ShootTime > m_Opponent.ShootTime;
+        return arg ? m_Opponent : m_Player;
+    }
+
+    private IEnumerator SwitchWinner()
+    {
+        StartSlowMotionEvent(getWinner(), true);
+        yield return new WaitForSeconds(m_ShowEnemyBullet);
+        NextPhaseSlowMotion(getWinner());
+    }
+
+    private void StartSlowMotionEvent(PlayerManager player, bool isFocussed)
+    {
+        if (player.Bullet == null) return;
+        player.Bullet.ChangeSpeed(true);
+        if (isFocussed)
+        {
+            m_CameraManager.Focus(player.Bullet);
+            m_CameraManager.NextAnimationState();
+        }
+    }
+
+    private void NextPhaseSlowMotion(PlayerManager player)
+    {
+        if (player.Bullet == null) return;
+        player.Bullet.ChangeSpeed(false);
+        m_CameraManager.NextAnimationState();
     }
 
     private void OnBulletShootedEvent(PlayerManager owner, float shootingTime)
@@ -157,7 +186,6 @@ public class GameManager : MonoBehaviour {
 
         //get target
         PlayerManager target = owner == m_Player ? m_Opponent : m_Player;
-
         owner.Bullet.Init(target.getHitPoint());
 
         //store times, penaly if not in bang
@@ -168,16 +196,7 @@ public class GameManager : MonoBehaviour {
 
         Debug.Log(owner.ShootTime);
 
-        //slowdown bullet
-        owner.Bullet.ChangeSpeed(true);
-
-        //disable after shooting
-        owner.enabled = false;
-
         //camera 
-        if (owner == m_Player)
-        {
-            m_CameraManager.StartFollow(owner.Bullet.gameObject);
-        }
+        StartSlowMotionEvent(owner, owner == m_Player);
     }
 }

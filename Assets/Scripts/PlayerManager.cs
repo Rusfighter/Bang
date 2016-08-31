@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     public enum PlayerState
     {
-        IDLE, READY, BANG
+        EMPTY, IDLE, READY, SHOOTED
     }
 
     public float m_ShootDelay = 0.35f;
@@ -54,9 +54,9 @@ public class PlayerManager : MonoBehaviour
             m_RigidBodys[i].isKinematic = true;
     }
 
-    public Vector3 getHitPoint()
+    public GameObject getHitPoint()
     {
-        Vector3 hitPoint =  m_RigidBodys[Random.Range(0, m_RigidBodys.Length - 1)].transform.position;
+        GameObject hitPoint =  m_RigidBodys[Random.Range(0, m_RigidBodys.Length - 1)].gameObject;
         return hitPoint;
     }
 
@@ -67,18 +67,16 @@ public class PlayerManager : MonoBehaviour
 
     public void nextState()
     {
+        m_State++;
         switch (m_State)
         {
             case PlayerState.IDLE:
-                State = PlayerState.READY;
-                m_Animator.SetTrigger(m_ReadyTrigger);
                 break;
             case PlayerState.READY:
-                State = PlayerState.BANG;
-                m_Animator.SetBool(m_BangBool, true);
-                StartCoroutine(Shoot(m_ShootDelay));
+                m_Animator.SetTrigger(m_ReadyTrigger);
                 break;
-            case PlayerState.BANG:
+            case PlayerState.SHOOTED:
+                m_Animator.SetBool(m_BangBool, true);
                 StartCoroutine(Shoot(m_ShootDelay));
                 break;
         }
@@ -86,16 +84,18 @@ public class PlayerManager : MonoBehaviour
 
     private IEnumerator Shoot(float delay)
     {
+        Debug.Log("Ready to Shoot");
         yield return new WaitForSeconds(delay);   //Wait
 
         //create a bullet at transform position
         GameObject bullet = (GameObject)Instantiate(m_Bullet, m_BulletStart.position, m_BulletStart.rotation);
         bullet.SetActive(true);
-
         m_BulletScript = bullet.GetComponent<Bullet>();
 
         if (onBulletShooted != null)
             onBulletShooted(this, Time.timeSinceLevelLoad);
+
+        Debug.Log("Shoot");
     }
 
     public void onHit(Rigidbody rb, Vector3 direction)
@@ -105,6 +105,6 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < lenght; i++)
             m_RigidBodys[i].isKinematic = false;
 
-        rb.AddForce(direction.normalized * Random.Range(200, 400), ForceMode.Impulse);
+        rb.AddForce(direction.normalized * Random.Range(200, 300), ForceMode.Impulse);
     }
 }

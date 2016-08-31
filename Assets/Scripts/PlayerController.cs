@@ -3,6 +3,8 @@
 public class PlayerController : MonoBehaviour {
 
     public PlayerManager m_PlayerManager;
+    public delegate void Shoot();
+    public event Shoot onShoot;
 
     void Awake()
     {
@@ -17,7 +19,8 @@ public class PlayerController : MonoBehaviour {
 	    if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) 
             || Input.GetKeyDown(KeyCode.Space))
         {
-            m_PlayerManager.nextState(); 
+            m_PlayerManager.nextState();
+            if (onShoot != null) onShoot(); 
         }
 	}
 }
